@@ -1,20 +1,18 @@
+"use client";
+
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AddListComponent from "./components/AddListComponent";
+import ListsDisplay from "./components/ListsDisplay";
 
-function getInitials(firstName: string | null, lastName: string | null): string {
-  const first = firstName?.charAt(0).toUpperCase() || '';
-  const last = lastName?.charAt(0).toUpperCase() || '';
-  return first + last;
-}
+export default function Home() {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-export default async function Home() {
-  const { userId } = await auth();
-  const user = userId ? await currentUser() : null;
-  
-  const initials = user ? getInitials(user.firstName, user.lastName) : 'U';
+  const handleListCreated = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -50,7 +48,7 @@ export default async function Home() {
               fontSize: '16px'
             }}
           >
-            {initials}
+            U
           </div>
         </header>
 
@@ -65,11 +63,12 @@ export default async function Home() {
           
           {/* Center Component */}
           <div className="flex-1 flex items-center justify-center">
-            <AddListComponent />
+            <AddListComponent onListCreated={handleListCreated} />
           </div>
-        </main>
 
-        
+          {/* Lists Display */}
+          <ListsDisplay refreshTrigger={refreshTrigger} />
+        </main>
       </SignedIn>
     </div>
   );
