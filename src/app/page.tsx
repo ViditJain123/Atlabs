@@ -1,20 +1,10 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import AddListComponent from "./components/AddListComponent";
-
-function getInitials(firstName: string | null, lastName: string | null): string {
-  const first = firstName?.charAt(0).toUpperCase() || '';
-  const last = lastName?.charAt(0).toUpperCase() || '';
-  return first + last;
-}
+import AddListComponent from "../components/AddListComponent";
+import TodoListDisplay from "../components/TodoListDisplay";
 
 export default async function Home() {
-  const { userId } = await auth();
-  const user = userId ? await currentUser() : null;
-  
-  const initials = user ? getInitials(user.firstName, user.lastName) : 'U';
 
   return (
     <div className="min-h-screen bg-white">
@@ -40,18 +30,15 @@ export default async function Home() {
             />
           </div>
 
-          {/* User Profile Circle */}
-          <div 
-            className="rounded-full flex items-center justify-center text-white font-semibold"
-            style={{ 
-              backgroundColor: '#D52121',
-              width: '32px',
-              height: '32px',
-              fontSize: '16px'
+          {/* User Profile */}
+          <UserButton 
+            appearance={{
+              elements: {
+                avatarBox: "w-8 h-8",
+                userButtonTrigger: "focus:shadow-none"
+              }
             }}
-          >
-            {initials}
-          </div>
+          />
         </header>
 
         {/* Main Content */}
@@ -63,7 +50,10 @@ export default async function Home() {
             </h1>
           </div>
           
-          {/* Center Component */}
+          {/* Todo Lists Display */}
+          <TodoListDisplay className="mb-6" />
+          
+          {/* Add List Component */}
           <div className="flex-1 flex items-center justify-center">
             <AddListComponent />
           </div>
