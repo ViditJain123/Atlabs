@@ -142,6 +142,11 @@ export async function POST(request: NextRequest) {
 
     const savedTodo = await newTodo.save();
 
+    // Manually update the totalTasks count in the parent list
+    await TodoList.findByIdAndUpdate(listId, {
+      $inc: { totalTasks: 1 }
+    });
+
     return NextResponse.json({
       success: true,
       data: savedTodo,

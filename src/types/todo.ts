@@ -1,14 +1,14 @@
 // Enums for Todo properties
 export enum TodoStatus {
-  TODO = 'To Do',
-  IN_PROGRESS = 'In Progress',
-  COMPLETED = 'Completed'
+  TODO = 'to-do',
+  IN_PROGRESS = 'in progress',
+  COMPLETED = 'completed'
 }
 
 export enum TodoPriority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High'
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high'
 }
 
 // Client-side interface (without mongoose Document)
@@ -22,4 +22,18 @@ export interface ITodo {
   listId: string;
   userId: string;
   updatedAt: Date;
+}
+
+// Client-side interface for TodoList (without mongoose Document)
+export interface ITodoList {
+  _id: string;
+  listName: string;
+  userId: string;
+  sharedWith: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  totalTasks: number;
+  todoCount?: number; // Computed field
+  completedCount?: number; // Computed field
+  completionPercentage?: number; // Computed field
 }

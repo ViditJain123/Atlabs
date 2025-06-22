@@ -141,6 +141,11 @@ export async function DELETE(
       );
     }
 
+    // Manually update the totalTasks count in the parent list
+    await TodoList.findByIdAndUpdate(deletedTodo.listId, {
+      $inc: { totalTasks: -1 }
+    });
+
     return NextResponse.json({
       success: true,
       message: 'Todo deleted successfully',

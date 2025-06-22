@@ -2,19 +2,20 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ITodoList extends Document {
   _id: string;
-  name: string;
+  listName: string;
   userId: string; // Owner of the list
   sharedWith: string[]; // Array of user IDs who have access to this list
   createdAt: Date;
   updatedAt: Date;
-  todoCount?: number; // Total number of todos in the list
-  completedCount?: number; // Number of completed todos
-  completionPercentage?: number; // Percentage of completed todos
+  totalTasks: number; // Total number of tasks in the list
+  todoCount?: number; // Total number of todos in the list (computed)
+  completedCount?: number; // Number of completed todos (computed)
+  completionPercentage?: number; // Percentage of completed todos (computed)
 }
 
 const TodoListSchema: Schema = new Schema(
   {
-    name: {
+    listName: {
       type: String,
       required: [true, 'List name is required'],
       trim: true,
@@ -29,6 +30,11 @@ const TodoListSchema: Schema = new Schema(
       type: String,
       index: true,
     }],
+    totalTasks: {
+      type: Number,
+      default: 0,
+      min: [0, 'Total tasks cannot be negative'],
+    },
   },
   {
     timestamps: true,

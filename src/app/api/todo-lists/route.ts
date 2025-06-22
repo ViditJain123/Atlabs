@@ -77,9 +77,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name } = await request.json();
+    const { listName } = await request.json();
     
-    if (!name || name.trim().length === 0) {
+    if (!listName || listName.trim().length === 0) {
       return NextResponse.json(
         { error: 'List name is required' },
         { status: 400 }
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     await dbConnect();
     
     const todoList = new TodoList({
-      name: name.trim(),
+      listName: listName.trim(),
       userId,
     });
     
@@ -151,6 +151,9 @@ export async function DELETE(request: NextRequest) {
     
     // Delete all todos in this list
     await Todo.deleteMany({ listId });
+    
+    // Update the totalTasks to 0 since we're deleting the whole list
+    await TodoList.findByIdAndUpdate(listId, { totalTasks: 0 });
     
     // Delete the todo list
     await TodoList.findByIdAndDelete(listId);
