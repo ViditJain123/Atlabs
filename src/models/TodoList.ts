@@ -27,8 +27,12 @@ const TodoListSchema: Schema = new Schema(
     },
     sharedWith: [{
       type: String,
-      index: true,
     }],
+    totalTasks: {
+      type: Number,
+      default: 0,
+      min: [0, 'Total tasks cannot be negative'],
+    },
   },
   {
     timestamps: true,

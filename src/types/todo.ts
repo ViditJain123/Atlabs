@@ -1,14 +1,14 @@
 // Enums for Todo properties
 export enum TodoStatus {
-  TODO = 'To Do',
-  IN_PROGRESS = 'In Progress',
-  COMPLETED = 'Completed'
+  TODO = 'to-do',
+  IN_PROGRESS = 'in-progress',
+  COMPLETED = 'completed'
 }
 
 export enum TodoPriority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High'
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high'
 }
 
 // Client-side interface (without mongoose Document)

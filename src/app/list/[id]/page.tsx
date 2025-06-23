@@ -3,19 +3,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useTodoListStore } from '@/store/todoListStore';
-import TodoDisplay from '@/app/components/TodoDisplay';
+import TodoDisplay from '@/components/TodoDisplay';
 import { useTodoCollaboration } from '@/hooks/useTodoCollaboration';
 
 export default function ListPage() {
   const params = useParams();
   const router = useRouter();
-  const listId = params.id as string;
+  const listId = params?.id as string;
   
   const [listName, setListName] = useState('');
   const { todoLists, fetchTodoLists } = useTodoListStore();
   
   // Initialize real-time collaboration for this list
-  useTodoCollaboration(listId);
+  useTodoCollaboration(listId || '');
 
   useEffect(() => {
     if (todoLists.length === 0) {
@@ -24,7 +24,7 @@ export default function ListPage() {
   }, [todoLists.length, fetchTodoLists]);
 
   useEffect(() => {
-    if (todoLists.length > 0) {
+    if (todoLists.length > 0 && listId) {
       const currentList = todoLists.find(list => list._id === listId);
       if (currentList) {
         setListName(currentList.name);
@@ -35,7 +35,7 @@ export default function ListPage() {
     }
   }, [todoLists, listId, router]);
 
-  if (!listName) {
+  if (!listId || !listName) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-gray-500">Loading...</div>
@@ -56,7 +56,7 @@ export default function ListPage() {
         </div>
       </div>
       
-      <TodoDisplay listId={listId} listName={listName} />
+      <TodoDisplay listId={listId} />
     </div>
   );
 }
